@@ -1,0 +1,177 @@
+/* Class containing left and right child of current node */
+class Node {
+	int data;
+	Node left, right;
+	public Node(int item) {
+		data = item;
+		left = right = null;
+	}
+}
+class BinaryTree {
+    Node root; /* Root of Binary Tree (BT) */
+	BinaryTree() { 
+		root = null; 
+	}
+	/* ****** TODO â€“ Methods ****** */
+	/* Inorder traversal method to print nodes in BT */
+	void printInorder(Node node) {
+		if (node == null)
+			return;
+		printInorder(node.left); /* First recur on left child */
+		System.out.print(node.data + " "); /* Then print node data */
+		printInorder(node.right); /* Now recur on right child */
+	}
+	/* Preorder traversal method to print nodes in BT */
+	void printPreorder(Node node) {
+		if (node == null)
+			return;
+		System.out.print(node.data + " "); /* First print node data */
+		printPreorder(node.left); /* Then recur on left tree */
+		printPreorder(node.right); /* Now recur on right subtree */
+	}
+	/* Postorder traversal method to print nodes in BT */
+	void printPostorder(Node node) {
+		if (node == null)
+			return;
+		printPostorder(node.left); /* First recur on left tree */
+		printPostorder(node.right); /* Then recur on right subtree */
+		System.out.print(node.data + " "); /* Now print node data */
+	}
+	
+	
+	
+    /* Method: print level order traversal */
+	void printLevelOrder() { 
+		int h = height(root);
+		int i;
+		for (i = 1; i <= h; i++)
+			printCurrentLevel(root, i);
+	}
+	/* Method: compute the height of a tree */
+	int height(Node root) {
+		if (root == null)
+			return 0;
+		else { // compute height of each subtree
+			int lheight = height(root.left);
+			int rheight = height(root.right);
+			/* use the larger one */
+			if (lheight > rheight) // use the larger one
+				return (lheight + 1);
+			else
+				return (rheight + 1);
+		}
+	}
+	/* Method: print node at current level */
+	void printCurrentLevel(Node root, int level) {
+		if (root == null)
+			return;
+		if (level == 1)
+			System.out.print(root.data + " ");
+		else if (level > 1) {
+			printCurrentLevel(root.left, level - 1);
+			printCurrentLevel(root.right, level - 1);
+		}
+	}
+	
+	
+	
+	/* Method: print leaf nodes of a BT */
+	void printLeaves(Node node) {
+		if (node == null)
+			return;
+		printLeaves(node.left);
+		/* Print if itâ€™s a leaf node */
+		if (node.left == null && node.right == null)
+			System.out.print(node.data + " ");
+		printLeaves(node.right);
+	}
+	/* Method: print all left boundary nodes (except leaf) */
+	void printBoundaryLeft(Node node) {
+		if (node == null)
+			return;
+		if (node.left != null) {
+			System.out.print(node.data + " ");
+			printBoundaryLeft(node.left);
+		} else if (node.right != null) {
+			System.out.print(node.data + " ");
+			printBoundaryLeft(node.right);
+		}
+		/* Do nothing if itâ€™s a leaf node, to avoid duplicates prints */
+	}
+	/* Method: print all right boundary nodes (except leaf) */
+	void printBoundaryRight(Node node) {
+		if (node == null)
+			return;
+		if (node.right != null) {
+			printBoundaryRight(node.right);
+			System.out.print(node.data + " ");
+		} else if (node.left != null) {
+			printBoundaryRight(node.left);
+			System.out.print(node.data + " ");
+		}
+		/* Do nothing if itâ€™s a leaf node, to avoid duplicates prints */
+	}
+	/* Method: perform boundary traversal of given BT */
+	void printBoundary(Node node) {
+		if (node == null)
+			return;
+		System.out.print(node.data + " ");
+		printBoundaryLeft(node.left);
+		printLeaves(node.left);
+		printLeaves(node.right);
+		printBoundaryRight(node.right);
+	}
+	
+	
+	/* Method: insert an element in a given BT */
+	public void insert(int value) {
+		Node new_node = new Node(value);
+		if (root == null) {
+			root = new_node;
+		} else {
+			Node current_node = root;
+			while (true) {
+				if (current_node.left == null) {
+					current_node.left = new_node;
+					break;
+				} else if (current_node.right == null) {
+					current_node.right = new_node;
+					break;
+				} else {
+					current_node = current_node.left;
+				}
+			}
+		}
+	}
+
+}
+
+public class Main {
+    /* Main driver method */
+	public static void main(String[] args) {
+		System.out.println("Hello World");
+		BinaryTree tree = new BinaryTree();
+		tree.root = new Node(5);
+		tree.root.left = new Node(6);
+		tree.root.right = new Node(7);
+		tree.root.left.left = new Node(3);
+		tree.root.left.right = new Node(4);
+		tree.root.left.right.left = new Node(2);
+
+		System.out.println("Inorder traversal of BT is ");
+		tree.printInorder(tree.root);
+
+		System.out.println("Preorder traversal of BT is ");
+		tree.printPreorder(tree.root);
+
+		System.out.println("Postorder traversal of BT is ");
+		tree.printPostorder(tree.root);
+		
+		System.out.println("\nLevel order traversal of BT is ");
+		tree.printLevelOrder();
+		
+		System.out.println("\nBoundary traversal of BT is ");
+		tree.printBoundary(tree.root);
+		
+	}
+}
